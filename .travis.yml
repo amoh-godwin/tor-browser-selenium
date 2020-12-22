@@ -6,17 +6,11 @@ services:
 addons:
   apt:
     sources:
-      - sourceline: 'deb https://deb.torproject.org/torproject.org focal main'
-    packages:
-    - tor
-    - tor-geoipdb
-env:
-  global:
-    - DOWNLOAD_DIR=${HOME}/download
     - STABLE=10.0.6
     - EXPERIMENTAL=10.5a4
     - TBB_DIST_URL=https://www.torproject.org/dist/torbrowser/
-
+  matrix:
+    - TRAVIS_EXTRA_JOB_WORKAROUND=true
 cache:
   directories:
   - ${DOWNLOAD_DIR}
@@ -46,5 +40,23 @@ jobs:
       - cd tbselenium
     script: travis_retry py.test -s -v --cov=tbselenium --cov-report term-missing --durations=10 test
 
-  exclude:
-    - env: TRAVIS_EXTRA_JOB_WORKAROUND=true
+
+
+sudo: false
+language: python
+os: linux
+dist: focal
+services:
+  - xvfb
+addons:
+  apt:
+    sources:
+    - STABLE=10.0.6
+    - EXPERIMENTAL=10.5a4
+    - TBB_DIST_URL=https://www.torproject.org/dist/torbrowser/
+  matrix:
+    - TRAVIS_EXTRA_JOB_WORKAROUND=true
+cache:
+  directories:
+  - ${DOWNLOAD_DIR}
+matrix:
