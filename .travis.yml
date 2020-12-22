@@ -17,6 +17,7 @@ env:
     - STABLE=10.0.6
     - EXPERIMENTAL=10.5a4
     - TBB_DIST_URL=https://www.torproject.org/dist/torbrowser/
+    - TSH=./travis.sh
   matrix:
     - TRAVIS_EXTRA_JOB_WORKAROUND=true
 cache:
@@ -53,15 +54,14 @@ matrix:
       env:
         - VERSION_ARCH="${STABLE}/tor-browser-win64-${STABLE}_en-US.mar"
         - PATH=/c/Python38:/c/Python38/Scripts:$PATH
-      install:
-        - dir
+        - TSH=./travis.sh
   exclude:
     - env: TRAVIS_EXTRA_JOB_WORKAROUND=true
 install:
   - pip install -r requirements-travis.txt
   - pip install .
   - TARBALL=`echo ${VERSION_ARCH} |cut -d'/' -f 2`
-  - . ./travis.sh
+  - . ${TSH}
   - locale="_"`echo $TARBALL |cut -d'_' -f 2 | cut -d'.' -f 1`
   - export TBB_PATH=${HOME}/tor-browser${locale}
 
