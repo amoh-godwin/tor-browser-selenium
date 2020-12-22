@@ -19,7 +19,6 @@ env:
     - TBB_DIST_URL=https://www.torproject.org/dist/torbrowser/
 
   matrix:
-    - TSH=./travis.sh
     - TRAVIS_EXTRA_JOB_WORKAROUND=true
 cache:
   directories:
@@ -28,25 +27,39 @@ matrix:
   include:
     - python: "3.6"
       os: linux
-      env: VERSION_ARCH="${EXPERIMENTAL}/tor-browser-linux64-${EXPERIMENTAL}_en-US.tar.xz"
+      env:
+        - VERSION_ARCH="${EXPERIMENTAL}/tor-browser-linux64-${EXPERIMENTAL}_en-US.tar.xz"   
+        - TSH=./travis.sh
     - python: "3.6"
       os: linux
-      env: VERSION_ARCH="${EXPERIMENTAL}/tor-browser-linux64-${EXPERIMENTAL}_zh-CN.tar.xz"
+      env:
+        - VERSION_ARCH="${EXPERIMENTAL}/tor-browser-linux64-${EXPERIMENTAL}_zh-CN.tar.xz"
+        - TSH=./travis.sh
     - python: "3.6"
       os: linux
-      env: VERSION_ARCH="${EXPERIMENTAL}/tor-browser-linux64-${EXPERIMENTAL}_ar.tar.xz"
+      env:
+        - VERSION_ARCH="${EXPERIMENTAL}/tor-browser-linux64-${EXPERIMENTAL}_ar.tar.xz"
+        - TSH=./travis.sh
     - python: "3.6"
       os: linux
-      env: VERSION_ARCH="${STABLE}/tor-browser-linux64-${STABLE}_en-US.tar.xz"
+      env:
+        - VERSION_ARCH="${STABLE}/tor-browser-linux64-${STABLE}_en-US.tar.xz"
+        - TSH=./travis.sh
     - python: "3.6"
       os: linux
-      env: VERSION_ARCH="${STABLE}/tor-browser-linux64-${STABLE}_zh-CN.tar.xz"
+      env:
+        - VERSION_ARCH="${STABLE}/tor-browser-linux64-${STABLE}_zh-CN.tar.xz"
+        - TSH=./travis.sh
     - python: "3.6"
       os: linux
-      env: VERSION_ARCH="${STABLE}/tor-browser-linux64-${STABLE}_ar.tar.xz"
+      env:
+        - VERSION_ARCH="${STABLE}/tor-browser-linux64-${STABLE}_ar.tar.xz"
+        - TSH=./travis.sh
     - python: "2.7"
       os: linux
-      env: VERSION_ARCH="${STABLE}/tor-browser-linux64-${STABLE}_en-US.tar.xz"
+      env:
+        - VERSION_ARCH="${STABLE}/tor-browser-linux64-${STABLE}_en-US.tar.xz"
+        - TSH=./travis.sh
     - language: "shell"
       os: windows
       before_install:
