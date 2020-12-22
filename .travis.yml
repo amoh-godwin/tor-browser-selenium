@@ -17,7 +17,8 @@ env:
     - STABLE=10.0.6
     - EXPERIMENTAL=10.5a4
     - TBB_DIST_URL=https://www.torproject.org/dist/torbrowser/
-    - TSH=./travis.sh
+
+  - TSH=./travis.sh
   matrix:
     - TRAVIS_EXTRA_JOB_WORKAROUND=true
 cache:
