@@ -60,8 +60,8 @@ matrix:
         - pip install -r requirements-travis.txt
         - pip install .
         - ECHO "ALL IS WELL"
-        - md ${DOWNLOAD_DIR}
-        - echo ${DOWNLOAD_DIR}
+        - md %DOWNLOAD_DIR%
+        - echo %DOWNLOAD_DIR%
         - curl ${TBB_DIST_URL}/${VERSION_ARCH} -o ${DOWNLOAD_DIR}/${MAR}
         - unzip -o ${DOWNLOAD_DIR}/${MAR} -d ${DOWNLOAD_DIR}
         - curl $geckodriver_url -o ${DOWNLOAD_DIR}/$gecko_filename
