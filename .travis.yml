@@ -31,30 +31,20 @@ jobs:
       os: linux
       env: VERSION_ARCH="${EXPERIMENTAL}/tor-browser-linux64-${EXPERIMENTAL}_en-US.tar.xz"
       python: 3.6
-      install:
-        - pip install -r requirements-travis.txt
-        - pip install .
-        - TARBALL=`echo ${VERSION_ARCH} |cut -d'/' -f 2`
-        - . ./travis.sh
-        - locale="_"`echo $TARBALL |cut -d'_' -f 2 | cut -d'.' -f 1`
-        - export TBB_PATH=${HOME}/tor-browser${locale}
-      before_script:
-        - cd tbselenium
-      script: travis_retry py.test -s -v --cov=tbselenium --cov-report term-missing --durations=10 test
     - name: "Linux Python 3.6 on EXPERIMENTAL zh-CN tar"
       os: linux
       env: VERSION_ARCH="${EXPERIMENTAL}/tor-browser-linux64-${EXPERIMENTAL}_zh-CN.tar.xz"
       python: 3.6
-      install:
-        - pip install -r requirements-travis.txt
-        - pip install .
-        - TARBALL=`echo ${VERSION_ARCH} |cut -d'/' -f 2`
-        - . ./travis.sh
-        - locale="_"`echo $TARBALL |cut -d'_' -f 2 | cut -d'.' -f 1`
-        - export TBB_PATH=${HOME}/tor-browser${locale}
-      before_script:
-        - cd tbselenium
-      script: travis_retry py.test -s -v --cov=tbselenium --cov-report term-missing --durations=10 test
+    install:
+      - pip install -r requirements-travis.txt
+      - pip install .
+      - TARBALL=`echo ${VERSION_ARCH} |cut -d'/' -f 2`
+      - . ./travis.sh
+      - locale="_"`echo $TARBALL |cut -d'_' -f 2 | cut -d'.' -f 1`
+      - export TBB_PATH=${HOME}/tor-browser${locale}
+    before_script:
+      - cd tbselenium
+    script: travis_retry py.test -s -v --cov=tbselenium --cov-report term-missing --durations=10 test
 
   exclude:
     - env: TRAVIS_EXTRA_JOB_WORKAROUND=true
