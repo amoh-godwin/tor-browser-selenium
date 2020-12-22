@@ -133,7 +133,11 @@ jobs:
         - TBB_PATH=${HOME}/${MAR}
         - geckodriver_url="https://github.com/mozilla/geckodriver/releases/download/v0.27.0/geckodriver-v0.27.0-win64.zip"
         - gecko_filename="geckodriver-v0.27.0-win64.zip"
-      python: 3.6
+      language: shell
+      before_install:
+        - choco install python --version 3.8.0
+        - python -m pip install --upgrade pip
+      env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
       install:
         - pip install -r requirements-travis.txt
         - pip install .
