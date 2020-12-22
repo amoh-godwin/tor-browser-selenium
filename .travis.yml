@@ -1,40 +1,53 @@
+sudo: false
 language: python
-
+os: linux
 dist: focal
 services:
   - xvfb
 addons:
   apt:
     sources:
+      - sourceline: 'deb https://deb.torproject.org/torproject.org focal main'
+    packages:
+    - tor
+    - tor-geoipdb
+env:
+  global:
+    - DOWNLOAD_DIR=${HOME}/download
     - STABLE=10.0.6
     - EXPERIMENTAL=10.5a4
     - TBB_DIST_URL=https://www.torproject.org/dist/torbrowser/
-
+  matrix:
+    - TRAVIS_EXTRA_JOB_WORKAROUND=true
 cache:
   directories:
   - ${DOWNLOAD_DIR}
-
-jobs:
-
-  - TRAVIS_EXTRA_JOB_WORKAROUND=true
-
+matrix:
   include:
-
-    - name: "Linux Python 3.6 on EXPERIMENTAL en-US tar"
-      os: linux
+    - python: "3.6"
       env: VERSION_ARCH="${EXPERIMENTAL}/tor-browser-linux64-${EXPERIMENTAL}_en-US.tar.xz"
-      python: 3.6
-    - name: "Linux Python 3.6 on EXPERIMENTAL zh-CN tar"
-      os: linux
+    - python: "3.6"
       env: VERSION_ARCH="${EXPERIMENTAL}/tor-browser-linux64-${EXPERIMENTAL}_zh-CN.tar.xz"
-      python: 3.6
-    install:
-      - pip install -r requirements-travis.txt
-      - pip install .
-      - TARBALL=`echo ${VERSION_ARCH} |cut -d'/' -f 2`
-      - . ./travis.sh
-      - locale="_"`echo $TARBALL |cut -d'_' -f 2 | cut -d'.' -f 1`
-      - export TBB_PATH=${HOME}/tor-browser${locale}
-    before_script:
-      - cd tbselenium
-    script: travis_retry py.test -s -v --cov=tbselenium --cov-report term-missing --durations=10 test
+    - python: "3.6"
+      env: VERSION_ARCH="${EXPERIMENTAL}/tor-browser-linux64-${EXPERIMENTAL}_ar.tar.xz"
+    - python: "3.6"
+      env: VERSION_ARCH="${STABLE}/tor-browser-linux64-${STABLE}_en-US.tar.xz"
+    - python: "3.6"
+      env: VERSION_ARCH="${STABLE}/tor-browser-linux64-${STABLE}_zh-CN.tar.xz"
+    - python: "3.6"
+      env: VERSION_ARCH="${STABLE}/tor-browser-linux64-${STABLE}_ar.tar.xz"
+    - python: "2.7"
+      env: VERSION_ARCH="${STABLE}/tor-browser-linux64-${STABLE}_en-US.tar.xz"
+  exclude:
+    - env: TRAVIS_EXTRA_JOB_WORKAROUND=true
+install:
+  - pip install -r requirements-travis.txt
+  - pip install .
+  - TARBALL=`echo ${VERSION_ARCH} |cut -d'/' -f 2`
+  - . ./travis.sh
+  - locale="_"`echo $TARBALL |cut -d'_' -f 2 | cut -d'.' -f 1`
+  - export TBB_PATH=${HOME}/tor-browser${locale}
+
+before_script:
+  - cd tbselenium
+script: travis_retry py.test -s -v --cov=tbselenium --cov-report term-missing --durations=10 test
