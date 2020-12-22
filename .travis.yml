@@ -54,10 +54,11 @@ matrix:
       env:
         - VERSION_ARCH="${STABLE}/tor-browser-win64-${STABLE}_en-US.mar"
         - PATH=/c/Python38:/c/Python38/Scripts:$PATH
+        - MAR = _en-US
+        - TBB_PATH=${DOWNLOAD_DIR}/${MAR}
       install:
         - pip install -r requirements-travis.txt
         - pip install .
-        - MAR = _en-US
         - ECHO "ALL IS WELL"
         - md ${DOWNLOAD_DIR}
         - echo ${DOWNLOAD_DIR}
@@ -66,7 +67,6 @@ matrix:
         - curl $geckodriver_url -o ${DOWNLOAD_DIR}/$gecko_filename
         - unzip -o $geckodriver_url -d ${DOWNLOAD_DIR}
         - dir ${DOWNLOAD_DIR}
-        - TBB_PATH=${DOWNLOAD_DIR}/${MAR}
   exclude:
     - env: TRAVIS_EXTRA_JOB_WORKAROUND=true
 install:
