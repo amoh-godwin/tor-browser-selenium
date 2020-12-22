@@ -57,24 +57,17 @@ jobs:
       python: 3.6
     - name: "Windows Python 3.6 on EXPERIMENTAL en-US mar"
       os: windows
-      env: VERSION_ARCH="${EXPERIMENTAL}/tor-browser-win64-${EXPERIMENTAL}_en-US.mar"
+      env:
+        - VERSION_ARCH="${EXPERIMENTAL}/tor-browser-win64-${EXPERIMENTAL}_en-US.mar"
+        - MAR="tor-browser-win64.mar"
+        - TBB_PATH=${HOME}/${MAR}
+        - geckodriver_url="https://github.com/mozilla/geckodriver/releases/download/v0.27.0/geckodriver-v0.27.0-win64.zip"
+        - gecko_filename="geckodriver-v0.27.0-win64.zip"
       python: 3.6
-    install:
-      - pip install -r requirements-travis.txt
-      - pip install .
-      - if os = linux
-        - TARBALL=`echo ${VERSION_ARCH} |cut -d'/' -f 2`
-        - . ./travis.sh
-        - locale="_"`echo $TARBALL |cut -d'_' -f 2 | cut -d'.' -f 1`
-        - export TBB_PATH=${HOME}/tor-browser${locale}
-      - if os = windows
-        env:
-          - MAR="tor-browser-win64.mar"
-          - TBB_PATH=${HOME}/${MAR}
-          - geckodriver_url="https://github.com/mozilla/geckodriver/releases/download/v0.27.0/geckodriver-v0.27.0-win64.zip"
-          - gecko_filename="geckodriver-v0.27.0-win64.zip"
-    before_script:
-      - if os = windows
+      install:
+        - pip install -r requirements-travis.txt
+        - pip install .
+      before_script:
         - ECHO "ALL IS WELL"
         - md ${DOWNLOAD_DIR}
         - echo ${DOWNLOAD_DIR}
@@ -83,6 +76,17 @@ jobs:
         - curl $geckodriver_url -o ${DOWNLOAD_DIR}/$gecko_filename
         - unzip -o $geckodriver_url -d ${DOWNLOAD_DIR}
         - dir ${DOWNLOAD_DIR}
+        - cd tbselenium
+      script: set TBB_PATH=${TBB_PATH} travis_retry py.test -s -v --cov=tbselenium --cov-report term-missing --durations=10 test
+
+    install:
+      - pip install -r requirements-travis.txt
+      - pip install .
+      - TARBALL=`echo ${VERSION_ARCH} |cut -d'/' -f 2`
+      - . ./travis.sh
+      - locale="_"`echo $TARBALL |cut -d'_' -f 2 | cut -d'.' -f 1`
+      - export TBB_PATH=${HOME}/tor-browser${locale}
+    before_script:
       - cd tbselenium
     script: travis_retry py.test -s -v --cov=tbselenium --cov-report term-missing --durations=10 test
 
