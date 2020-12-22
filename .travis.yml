@@ -1,8 +1,8 @@
 language: python
 
 dist: focal
-ervices:
-  - xvfbs
+services:
+  - xvfb
 addons:
   apt:
     sources:
@@ -48,5 +48,3 @@ jobs:
 
   exclude:
     - env: TRAVIS_EXTRA_JOB_WORKAROUND=true
-
-
