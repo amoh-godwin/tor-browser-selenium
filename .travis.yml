@@ -47,7 +47,12 @@ matrix:
       env: VERSION_ARCH="${STABLE}/tor-browser-linux64-${STABLE}_en-US.tar.xz"
     - language: "shell"
       os: windows
-      env: VERSION_ARCH="${STABLE}/tor-browser-win64-${STABLE}_en-US.mar"
+      before_install:
+        - choco install python --version 3.8.0
+        - python -m pip install --upgrade pip
+      env:
+        - VERSION_ARCH="${STABLE}/tor-browser-win64-${STABLE}_en-US.mar"
+        - PATH=/c/Python38:/c/Python38/Scripts:$PATH
   exclude:
     - env: TRAVIS_EXTRA_JOB_WORKAROUND=true
 install:
