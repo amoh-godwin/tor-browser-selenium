@@ -28,37 +28,63 @@ jobs:
   include:
 
     - name: "Linux Python 3.6 on EXPERIMENTAL en-US tar"
+      os: linux
       env: VERSION_ARCH="${EXPERIMENTAL}/tor-browser-linux64-${EXPERIMENTAL}_en-US.tar.xz"
       python: 3.6
     - name: "Linux Python 3.6 on EXPERIMENTAL zh-CN tar"
+      os: linux
       env: VERSION_ARCH="${EXPERIMENTAL}/tor-browser-linux64-${EXPERIMENTAL}_zh-CN.tar.xz"
       python: 3.6
     - name: "Linux Python 3.6 on EXPERIMENTAL ar tar"
+      os: linux
       env: VERSION_ARCH="${EXPERIMENTAL}/tor-browser-linux64-${EXPERIMENTAL}_ar.tar.xz"
       python: 3.6
     - name: "Linux Python 3.6 on STABLE en-US tar"
+      os: linux
       env: VERSION_ARCH="${STABLE}/tor-browser-linux64-${STABLE}_en-US.tar.xz"
       python: 3.6
     - name: "Linux Python 3.6 on STABLE zh-CN tar"
+      os: linux
       env: VERSION_ARCH="${STABLE}/tor-browser-linux64-${STABLE}_zh-CN.tar.xz"
       python: 3.6
     - name: "Linux Python 3.6 on STABLE ar tar"
+      os: linux
       env: VERSION_ARCH="${STABLE}/tor-browser-linux64-${STABLE}_ar.tar.xz"
       python: 3.6
     - name: "Linux Python 2.7 on STABLE en-US tar"
+      os: linux
       env: VERSION_ARCH="${STABLE}/tor-browser-linux64-${STABLE}_en-US.tar.xz"
+      python: 3.6
+    - name: "Windows Python 3.6 on EXPERIMENTAL en-US mar"
+      os: windows
+      env: VERSION_ARCH="${EXPERIMENTAL}/tor-browser-win64-${EXPERIMENTAL}_en-US.mar"
       python: 3.6
     install:
       - pip install -r requirements-travis.txt
       - pip install .
-      - TARBALL=`echo ${VERSION_ARCH} |cut -d'/' -f 2`
-      - . ./travis.sh
-      - locale="_"`echo $TARBALL |cut -d'_' -f 2 | cut -d'.' -f 1`
-      - export TBB_PATH=${HOME}/tor-browser${locale}
+      - if os = linux
+        - TARBALL=`echo ${VERSION_ARCH} |cut -d'/' -f 2`
+        - . ./travis.sh
+        - locale="_"`echo $TARBALL |cut -d'_' -f 2 | cut -d'.' -f 1`
+        - export TBB_PATH=${HOME}/tor-browser${locale}
+      - if os = windows
+        env:
+          - MAR="tor-browser-win64.mar"
+          - TBB_PATH=${HOME}/${MAR}
+          - geckodriver_url="https://github.com/mozilla/geckodriver/releases/download/v0.27.0/geckodriver-v0.27.0-win64.zip"
+          - gecko_filename="geckodriver-v0.27.0-win64.zip"
     before_script:
+      - if os = windows
+        - ECHO "ALL IS WELL"
+        - md ${DOWNLOAD_DIR}
+        - echo ${DOWNLOAD_DIR}
+        - curl ${TBB_DIST_URL}/${VERSION_ARCH} -o ${DOWNLOAD_DIR}/${MAR}
+        - unzip -o ${DOWNLOAD_DIR}/${MAR} -d ${DOWNLOAD_DIR}
+        - curl $geckodriver_url -o ${DOWNLOAD_DIR}/$gecko_filename
+        - unzip -o $geckodriver_url -d ${DOWNLOAD_DIR}
+        - dir ${DOWNLOAD_DIR}
       - cd tbselenium
     script: travis_retry py.test -s -v --cov=tbselenium --cov-report term-missing --durations=10 test
-    os: linux
 
   exclude:
     - env: TRAVIS_EXTRA_JOB_WORKAROUND=true
