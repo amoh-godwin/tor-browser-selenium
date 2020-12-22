@@ -45,7 +45,7 @@ matrix:
     - python: "2.7"
       os: linux
       env: VERSION_ARCH="${STABLE}/tor-browser-linux64-${STABLE}_en-US.tar.xz"
-    - python: "3.6"
+    - language: "shell"
       os: windows
       env: VERSION_ARCH="${STABLE}/tor-browser-win64-${STABLE}_en-US.mar"
   exclude:
