@@ -54,7 +54,7 @@ matrix:
       env:
         - VERSION_ARCH="${STABLE}/tor-browser-win64-${STABLE}_en-US.mar"
         - PATH=/c/Python38:/c/Python38/Scripts:$PATH
-        - TSH=./travis.sh
+        - TSH=./travis_win.sh
   exclude:
     - env: TRAVIS_EXTRA_JOB_WORKAROUND=true
 install:
